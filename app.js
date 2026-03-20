@@ -17,6 +17,7 @@ const resultsScoreValue = document.getElementById("resultsScoreValue");
 const resultsScoreTitle = document.getElementById("resultsScoreTitle");
 const resultsScoreSummary = document.getElementById("resultsScoreSummary");
 const resultsConclusion = document.getElementById("resultsConclusion");
+const qandaItems = Array.from(document.querySelectorAll("[data-qanda-item]"));
 
 const resultsData = {
   cream: {
@@ -228,6 +229,120 @@ function updateFloatingTelegram() {
 window.addEventListener("scroll", updateFloatingTelegram, { passive: true });
 window.addEventListener("resize", updateFloatingTelegram);
 updateFloatingTelegram();
+
+if (qandaItems.length) {
+  const qandaDuration = prefersReducedMotion.matches ? 0 : 280;
+
+  const setQandaBodyState = (item, isOpen) => {
+    const body = item.querySelector(".qanda-item__body");
+    const summary = item.querySelector(".qanda-item__summary");
+
+    if (!body) {
+      return;
+    }
+
+    body.style.transition = "none";
+    body.style.height = isOpen ? "auto" : "0px";
+    body.style.opacity = isOpen ? "1" : "0";
+    item.open = isOpen;
+    item.dataset.animating = "false";
+    if (summary) {
+      summary.setAttribute("aria-expanded", String(isOpen));
+    }
+  };
+
+  const animateQandaItem = (item, shouldOpen) => {
+    const body = item.querySelector(".qanda-item__body");
+
+    if (!body || item.dataset.animating === "true") {
+      return;
+    }
+
+    if (qandaDuration === 0) {
+      setQandaBodyState(item, shouldOpen);
+      return;
+    }
+
+    const finishAnimation = (event) => {
+      if (event.propertyName !== "height") {
+        return;
+      }
+
+      body.style.transition = "none";
+      body.style.height = shouldOpen ? "auto" : "0px";
+      body.style.opacity = shouldOpen ? "1" : "0";
+      item.open = shouldOpen;
+      item.dataset.animating = "false";
+      const summary = item.querySelector(".qanda-item__summary");
+      if (summary) {
+        summary.setAttribute("aria-expanded", String(shouldOpen));
+      }
+      body.removeEventListener("transitionend", finishAnimation);
+    };
+
+    item.dataset.animating = "true";
+
+    if (shouldOpen) {
+      item.open = true;
+      body.style.transition = "none";
+      body.style.height = "0px";
+      body.style.opacity = "0";
+
+      const targetHeight = body.scrollHeight;
+
+      requestAnimationFrame(() => {
+        body.style.transition = `height ${qandaDuration}ms cubic-bezier(0.22, 1, 0.36, 1), opacity ${Math.max(
+          180,
+          qandaDuration - 40
+        )}ms ease`;
+        body.style.height = `${targetHeight}px`;
+        body.style.opacity = "1";
+      });
+    } else {
+      const startHeight = body.scrollHeight;
+
+      body.style.transition = "none";
+      body.style.height = `${startHeight}px`;
+      body.style.opacity = "1";
+
+      requestAnimationFrame(() => {
+        body.style.transition = `height ${qandaDuration}ms cubic-bezier(0.32, 0, 0.67, 0), opacity ${Math.max(
+          160,
+          qandaDuration - 60
+        )}ms ease`;
+        body.style.height = "0px";
+        body.style.opacity = "0";
+      });
+    }
+
+    body.addEventListener("transitionend", finishAnimation);
+  };
+
+  qandaItems.forEach((item) => {
+    const summary = item.querySelector(".qanda-item__summary");
+
+    setQandaBodyState(item, item.hasAttribute("open"));
+
+    if (!summary) {
+      return;
+    }
+
+    summary.addEventListener("click", (event) => {
+      event.preventDefault();
+
+      const shouldOpen = !item.open;
+      animateQandaItem(item, shouldOpen);
+    });
+  });
+
+  window.addEventListener("resize", () => {
+    qandaItems.forEach((item) => {
+      if (item.open && item.dataset.animating !== "true") {
+        setQandaBodyState(item, true);
+      }
+    });
+  });
+}
 
 if (hero && deviceWrap && !prefersReducedMotion.matches && window.innerWidth > 920) {
   hero.addEventListener("pointermove", (event) => {

@@ -475,7 +475,8 @@ footer[id] {
 .features-panel__title,
 .results-showcase__title,
 .audience-panel__title,
-.accent-panel__title {
+.accent-panel__title,
+.qanda-panel__title {
   margin: 0;
   font-family: var(--type-display-family);
   font-weight: var(--type-display-weight);
@@ -485,7 +486,8 @@ footer[id] {
 .features-panel__title,
 .results-showcase__title,
 .audience-panel__title,
-.accent-panel__title {
+.accent-panel__title,
+.qanda-panel__title {
   line-height: var(--type-display-line);
   letter-spacing: var(--type-display-tracking);
 }
@@ -2530,6 +2532,179 @@ footer[id] {
   content: none;
 }
 
+.qanda-block {
+  width: var(--hero-width);
+  margin: 0 auto 104px;
+}
+
+.qanda-panel {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 44px);
+  align-items: start;
+  padding: clamp(28px, 4vw, 40px);
+  border: var(--surface-panel-border);
+  border-radius: 32px;
+  background:
+    linear-gradient(180deg, var(--white-90), var(--white-94)),
+    radial-gradient(circle at 10% 16%, var(--sage-panel-alt), transparent 30%),
+    radial-gradient(circle at 88% 14%, var(--sand-panel-alt), transparent 28%);
+  box-shadow: var(--surface-panel-shadow);
+  backdrop-filter: var(--surface-panel-blur);
+}
+
+.qanda-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, var(--ink-0), var(--ink-10), var(--ink-0));
+}
+
+.qanda-panel__intro,
+.qanda-list {
+  position: relative;
+  z-index: 1;
+}
+
+.qanda-panel__intro {
+  display: grid;
+  gap: 18px;
+  align-content: start;
+}
+
+.qanda-panel__eyebrow {
+  margin: 0;
+  color: var(--ink-54);
+  font-size: var(--type-caption-size);
+  font-weight: var(--type-caption-weight);
+  letter-spacing: var(--type-caption-tracking);
+  text-transform: uppercase;
+}
+
+.qanda-panel__title {
+  margin: 0;
+  font-size: clamp(2.25rem, 4vw, 3.4rem);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+.qanda-panel__lead {
+  margin: 0;
+  max-width: 31ch;
+  color: var(--type-body-color);
+  font-size: clamp(1rem, 1.4vw, 1.14rem);
+  line-height: 1.6;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+}
+
+.qanda-list {
+  display: grid;
+  gap: 14px;
+}
+
+.qanda-item {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--ink-8);
+  border-radius: var(--radius-3xl);
+  background:
+    linear-gradient(180deg, var(--white-88), var(--sand-panel)),
+    radial-gradient(circle at top left, var(--white-24), var(--white-0));
+  box-shadow: 0 10px 24px var(--ink-4);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.qanda-item[open] {
+  border-color: var(--ink-10);
+  background:
+    linear-gradient(180deg, var(--white-94), var(--sage-slot)),
+    radial-gradient(circle at top left, var(--white-24), var(--white-0));
+  box-shadow: var(--shadow-soft);
+}
+
+.qanda-item__summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 22px;
+  list-style: none;
+  cursor: pointer;
+  font-family: var(--type-card-title-family);
+  font-size: clamp(1.45rem, 1.9vw, 1.9rem);
+  line-height: var(--type-card-title-line);
+  letter-spacing: var(--type-card-title-tracking);
+  font-weight: var(--type-card-title-weight);
+}
+
+.qanda-item__summary::-webkit-details-marker {
+  display: none;
+}
+
+.qanda-item__summary:focus-visible {
+  outline: 2px solid var(--green-focus);
+  outline-offset: -2px;
+}
+
+.qanda-item__summary span:first-child {
+  text-wrap: pretty;
+}
+
+.qanda-item__indicator {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  flex: none;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--ink-8);
+  background: linear-gradient(180deg, var(--white-90), var(--white-72));
+  box-shadow: 0 6px 14px var(--ink-4);
+}
+
+.qanda-item__indicator::before,
+.qanda-item__indicator::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--text);
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s ease;
+}
+
+.qanda-item__indicator::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.qanda-item[open] .qanda-item__indicator::after {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.qanda-item__body {
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.qanda-item__answer {
+  margin: 0 22px 22px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ink-6);
+  color: var(--ink-72);
+  font-size: 1rem;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
 .floating-telegram {
   position: fixed;
   left: 50%;
@@ -2822,6 +2997,14 @@ footer[id] {
   .accent-stage__phone {
     width: min(100%, 318px);
   }
+
+  .qanda-panel {
+    grid-template-columns: minmax(0, 0.72fr) minmax(0, 1fr);
+  }
+
+  .qanda-panel__title {
+    font-size: clamp(2.1rem, 3.9vw, 3rem);
+  }
 }
 
 @media (max-width: 920px) {
@@ -3090,6 +3273,21 @@ footer[id] {
   .accent-stage__phone {
     justify-self: center;
     margin-top: 8px;
+  }
+
+  .qanda-block {
+    margin-bottom: 92px;
+  }
+
+  .qanda-panel {
+    grid-template-columns: 1fr;
+    padding: 28px;
+    border-radius: 32px;
+  }
+
+  .qanda-panel__title,
+  .qanda-panel__lead {
+    max-width: 100%;
   }
 
   .accent-orb--one {
@@ -3406,6 +3604,41 @@ footer[id] {
     font-size: 0.98rem;
   }
 
+  .qanda-block {
+    margin-bottom: 80px;
+  }
+
+  .qanda-panel {
+    gap: 22px;
+    padding: 22px 18px 24px;
+    border-radius: 28px;
+  }
+
+  .qanda-panel__title {
+    font-size: clamp(1.95rem, 8vw, 2.45rem);
+  }
+
+  .qanda-item {
+    border-radius: var(--radius-2xl);
+  }
+
+  .qanda-item__summary {
+    gap: 14px;
+    padding: 18px;
+    font-size: clamp(1.28rem, 5.6vw, 1.55rem);
+  }
+
+  .qanda-item__indicator {
+    width: 38px;
+    height: 38px;
+  }
+
+  .qanda-item__answer {
+    margin: 0 18px 18px;
+    padding-top: 14px;
+    font-size: 0.98rem;
+  }
+
   .site-footer {
     margin-bottom: 24px;
   }
@@ -3584,6 +3817,30 @@ footer[id] {
   .telegram-mark {
     width: 38px;
     height: 38px;
+  }
+
+  .qanda-panel__lead {
+    font-size: 0.98rem;
+  }
+
+  .qanda-item__summary {
+    font-size: clamp(1.18rem, 6vw, 1.38rem);
+    line-height: 1.08;
+  }
+
+  .qanda-item__indicator {
+    width: 36px;
+    height: 36px;
+  }
+
+  .qanda-item__indicator::before,
+  .qanda-item__indicator::after {
+    width: 12px;
+  }
+
+  .qanda-item__answer {
+    font-size: 0.95rem;
+    line-height: 1.6;
   }
 
   .site-header__brand-title {
